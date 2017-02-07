@@ -22,3 +22,4 @@ CLASS_COLORS = {
     'train': (145, 91, 81),
     'tvmonitor': (0, 0, 0),
 }
+RESULT_LAYER_NAME = 'detection_out'
