@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import cv2
+from core.constants import CLASS_COLORS
 
 
 def draw_bounding_boxes(img, results):
@@ -11,11 +12,16 @@ def draw_bounding_boxes(img, results):
         yMin = int(result['boundingBox']['yMin'])
         xMax = int(result['boundingBox']['xMax'])
         yMax = int(result['boundingBox']['yMax'])
+
+        # flip around to BGR for opencv
+        red, green, blue = CLASS_COLORS[object_class]
+        box_color = (blue, green, red)
+
         cv2.rectangle(
             img_cp,
             (xMin, yMin),
             (xMax, yMax),
-            (0, 0, 204),
+            box_color,
             2
         )
 
@@ -26,7 +32,7 @@ def draw_bounding_boxes(img, results):
             img_cp,
             (xMin, yMax - ret[1] - baseline),
             (xMin + ret[0], yMax),
-            (0, 0, 204),
+            box_color,
             -1
         )
         cv2.putText(

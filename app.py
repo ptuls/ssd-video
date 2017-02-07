@@ -14,6 +14,7 @@ from vendor.caffe import detect, get_input_geometry, load_net, load_transformer,
 
 FRAME_SIZE = (640, 480)
 CONFIDENCE_THRESHOLD = 0.3
+FRAMES_PER_SECOND = 25
 
 
 def run():
@@ -32,7 +33,7 @@ def run():
     model_weights = args['weights']
     logging.info('setting up GPU and neural network...')
 
-    setup_device(False)
+    setup_device(True)
     try:
         net = load_net(model_definition, model_weights)
     except RuntimeError as err:
@@ -41,7 +42,6 @@ def run():
 
     try:
         transformer = load_transformer(get_input_geometry(net), get_imagenet_mean())
-    # unfortunately Transformer can throw a general exception; see caffe source
     except Exception as err:
         logging.error(err)
         sys.exit()
@@ -54,13 +54,13 @@ def run():
             fourcc = cv2.cv.CV_FOURCC('m', 'p', '4', 'v')
         except AttributeError:
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter(args['output'], fourcc, 25, FRAME_SIZE)
+        out = cv2.VideoWriter(args['output'], fourcc, FRAMES_PER_SECOND, FRAME_SIZE)
     except:
         try:
             fourcc = cv2.cv.CV_FOURCC('X', 'V', 'I', 'D')
         except AttributeError:
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter(args['output'], fourcc, 25, FRAME_SIZE)
+        out = cv2.VideoWriter(args['output'], fourcc, FRAMES_PER_SECOND, FRAME_SIZE)
     time.sleep(1.0)
 
     # loop over frames from the video file stream
