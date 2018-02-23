@@ -12,7 +12,7 @@ def detect_objects(
     Detect objects for a single image. Can be used with different neural network models.
 
     Arguments:
-        detections_per_image: a 6-tuple with (class, confidence, xmin, ymin, xmax, ymax)
+        detections: a 6-tuple with (class, confidence, xmin, ymin, xmax, ymax)
         image_size: size of the original image
         label_names: names of the classes the neural network was trained with
         confidence_threshold: only return results for objects with confidence above this threshold
@@ -56,15 +56,5 @@ def detect_objects(
             },
             'confidence': float(conf),
         })
-
-        logging.debug(
-            '%s: %s [%d, %d, %d, %d], Confidence: %.3f',
-            label,
-            x_min,
-            y_min,
-            x_max,
-            y_max,
-            conf,
-        )
 
     return results
